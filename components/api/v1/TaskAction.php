@@ -26,14 +26,13 @@ class TaskAction extends Action
 
             if ($task_list->id_user == $user->id) {
                 $task = new Task();
-                $task->id_task_list = $task_list->id;
-                $task->content = $param['content']['content'];
+                $task->setAttributes($param['content']);
                 $task->save();
             }
 
-
         } else if (Yii::$app->request->isPatch) {
             $param = Yii::$app->request->bodyParams;
+
             $user = WxUser::findOne(['openid' => $param['openid']]);
             $task = Task::findOne($param['content']['id']);
 
@@ -42,18 +41,17 @@ class TaskAction extends Action
                 $task->save();
             }
 
-
         } else if (Yii::$app->request->isDelete) {
             $param = Yii::$app->request->bodyParams;
+
             $user = WxUser::findOne(['openid' => $param['openid']]);
             $task = Task::findOne($param['content']['id']);
 
             if ($task->taskList->id_user == $user->id) {
                 $task->delete();
             }
-
-
         }
+
         return null;
     }
 }

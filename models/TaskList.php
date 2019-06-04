@@ -116,4 +116,36 @@ class TaskList extends \yii\db\ActiveRecord
             ->where(['finished' => $finished])
             ->limit($limit);
     }
+
+    /**
+     * 添加标签
+     *
+     * @param $user
+     * @param $labels
+     */
+    public function addLabels($user, $labels)
+    {
+        foreach ($labels as $label) {
+            $model = TaskLabel::findOne(['id_user' => $user->id, 'name' => $label]);
+            if (!$model) {
+                $model = new TaskLabel();
+                $model->id_user = $user->id;
+                $model->name = $label;
+                $model->save();
+            }
+            $this->link('taskLabels', $model);
+        }
+    }
+
+    /**
+     * 添加附加信息
+     */
+    public function putExtra()
+    {
+        $this->labels = $this->taskLabels;
+        $this->grouped_tasks['unfinished']['count'] = $this->getTasks(false)->count();
+        $this->grouped_tasks['unfinished']['content'] = $this->getTasks(false)->all();
+        $this->grouped_tasks['finished']['count'] = $this->getTasks(true)->count();
+        $this->grouped_tasks['finished']['content'] = $this->getTasks(true)->all();
+    }
 }

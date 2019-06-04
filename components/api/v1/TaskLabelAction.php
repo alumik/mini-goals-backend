@@ -22,8 +22,8 @@ class TaskLabelAction extends Action
             $param = Yii::$app->request->get();
 
             $user = WxUser::findOne(['openid' => $param['openid']]);
-            return $user->taskLabels;
 
+            return $user->taskLabels;
 
         } else if (Yii::$app->request->isPost) {
             $param = Yii::$app->request->post();
@@ -33,21 +33,11 @@ class TaskLabelAction extends Action
 
             if ($task_list->id_user == $user->id) {
                 $task_list->unlinkAll('taskLabels', true);
-                foreach ($param['content']['labels'] as $label) {
-                    $model = TaskLabel::findOne(['id_user' => $user->id, 'name' => $label]);
-                    if (!$model) {
-                        $model = new TaskLabel();
-                        $model->id_user = $user->id;
-                        $model->name = $label;
-                        $model->save();
-                    }
-                    $task_list->link('taskLabels', $model);
-                }
+                $task_list->addLabels($user, $param['content']['labels']);
                 TaskLabel::clean($user);
             }
-
-
         }
+
         return null;
     }
 }
