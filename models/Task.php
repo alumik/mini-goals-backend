@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "task".
@@ -51,7 +52,9 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * 获取任务列表
+     *
+     * @return ActiveQuery
      */
     public function getTaskList()
     {

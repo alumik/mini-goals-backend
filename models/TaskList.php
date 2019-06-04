@@ -74,14 +74,6 @@ class TaskList extends \yii\db\ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getTasks()
-    {
-        return $this->hasMany(Task::className(), ['id_task_list' => 'id']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
     public function getUser()
     {
         return $this->hasOne(WxUser::className(), ['id' => 'id_user']);
@@ -104,5 +96,19 @@ class TaskList extends \yii\db\ActiveRecord
     public function getTaskLabels()
     {
         return $this->hasMany(TaskLabel::className(), ['id' => 'id_task_label'])->viaTable('task_list_task_label_relation', ['id_task_list' => 'id']);
+    }
+
+    /**
+     * 获取任务
+     *
+     * @param $finished
+     * @param null $limit
+     * @return ActiveQuery
+     */
+    public function getTasks($finished, $limit = null)
+    {
+        return $this->hasMany(Task::className(), ['id_task_list' => 'id'])
+            ->where(['finished' => $finished])
+            ->limit($limit);
     }
 }
