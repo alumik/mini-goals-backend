@@ -35,7 +35,8 @@ class TaskList extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'id_user'], 'required'],
-            [['id_user', 'archived', 'order'], 'integer'],
+            [['id_user', 'order'], 'integer'],
+            [['archived'], 'boolean'],
             [['name'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => WxUser::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
@@ -98,5 +99,14 @@ class TaskList extends \yii\db\ActiveRecord
         $model = new self();
         $model->setAttributes($attributes);
         return $model;
+    }
+
+    /**
+     * 切换任务列表归档状态
+     */
+    public function toggleArchived()
+    {
+        $this->archived = !$this->archived;
+        $this->save();
     }
 }

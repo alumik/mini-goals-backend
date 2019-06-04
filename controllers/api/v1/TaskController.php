@@ -49,4 +49,18 @@ class TaskController extends Controller
         $user = WxUser::findOne(['openid' => $param['openid']]);
         $user->pushTaskList(TaskList::create($param['content']));
     }
+
+    /**
+     * 切换任务列表归档状态
+     */
+    public function actionArchive()
+    {
+        $param = Yii::$app->request->post();
+
+        $user = WxUser::findOne(['openid' => $param['openid']]);
+        $task_list = TaskList::findOne($param['id_task_list']);
+        if ($task_list->id_user == $user->id) {
+            $task_list->toggleArchived();
+        }
+    }
 }
