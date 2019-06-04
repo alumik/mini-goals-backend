@@ -20,6 +20,19 @@ use Yii;
  */
 class TaskList extends \yii\db\ActiveRecord
 {
+    public $labels;
+
+    public function fields()
+    {
+        return [
+            'id',
+            'name',
+            'archived',
+            'order',
+            'labels',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */

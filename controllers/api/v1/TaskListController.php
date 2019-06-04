@@ -2,6 +2,7 @@
 
 namespace app\controllers\api\v1;
 
+use app\models\TaskLabel;
 use app\models\TaskList;
 use app\models\WxUser;
 use Yii;
@@ -36,7 +37,11 @@ class TaskListController extends Controller
     public function actionIndex($openid, $archived)
     {
         $user = WxUser::findOne(['openid' => $openid]);
-        return $user->getTaskLists($archived);
+        $task_lists = $user->getTaskLists($archived)->all();
+        foreach ($task_lists as &$task_list) {
+            $task_list->labels = $task_list->taskLabels;
+        }
+        return $task_lists;
     }
 
     /**
@@ -68,5 +73,38 @@ class TaskListController extends Controller
                 $model->save();
             }
         }
+    }
+
+    /**
+     * 获取并设置任务列表标签
+     *
+     * @return TaskLabel[]|null
+     */
+    public function actionLabel()
+    {
+        if (Yii::$app->request->isGet) {
+            $param = Yii::$app->request->get();
+
+            $user = WxUser::findOne(['openid' => $param['openid']]);
+            return $user->taskLabels;
+        } else if (Yii::$app->request->isPost) {
+            $param = Yii::$app->request->post();
+
+            $user = WxUser::findOne(['openid' => $param['openid']]);
+            $task_list = TaskList::findOne($param['content']['id_task_list']);
+
+            $task_list->unlinkAll('taskLabels', true);
+            foreach ($param['content']['labels'] as $label) {
+                $model = TaskLabel::findOne(['id_user' => $user->id, 'name' => $label]);
+                if (!$model) {
+                    $model = new TaskLabel();
+                    $model->id_user = $user->id;
+                    $model->name = $label;
+                    $model->save();
+                }
+                $task_list->link('taskLabels', $model);
+            }
+        }
+        return null;
     }
 }

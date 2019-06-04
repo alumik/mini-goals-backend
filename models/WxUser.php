@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "user".
@@ -86,7 +87,7 @@ class WxUser extends \yii\db\ActiveRecord
      * 获取任务列表
      *
      * @param $archived
-     * @return TaskList[]
+     * @return ActiveQuery
      */
     public function getTaskLists($archived)
     {
@@ -95,8 +96,7 @@ class WxUser extends \yii\db\ActiveRecord
                 'id_user' => $this->id,
                 'archived' => $archived,
             ])
-            ->orderBy(['order' => SORT_DESC])
-            ->all();
+            ->orderBy(['order' => SORT_DESC]);
     }
 
     /**
