@@ -60,10 +60,13 @@ class TaskListController extends Controller
         $param = Yii::$app->request->post();
 
         $user = WxUser::findOne(['openid' => $param['openid']]);
-        $task_list = TaskList::findOne($param['id_task_list']);
-        if ($task_list->id_user == $user->id) {
-            $task_list->setAttributes($param['content']);
-            $task_list->save();
+        $task_lists = $param['content'];
+        foreach ($task_lists as $task_list) {
+            $model = TaskList::findOne($task_list['id']);
+            if ($model->id_user == $user->id) {
+                $model->setAttributes($task_list);
+                $model->save();
+            }
         }
     }
 }
