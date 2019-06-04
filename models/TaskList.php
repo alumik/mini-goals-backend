@@ -87,26 +87,4 @@ class TaskList extends \yii\db\ActiveRecord
     {
         return $this->hasMany(TaskLabel::className(), ['id' => 'id_task_label'])->viaTable('task_list_task_label_relation', ['id_task_list' => 'id']);
     }
-
-    /**
-     * 新建任务列表
-     *
-     * @param $attributes
-     * @return TaskList
-     */
-    public static function create($attributes)
-    {
-        $model = new self();
-        $model->setAttributes($attributes);
-        return $model;
-    }
-
-    /**
-     * 切换任务列表归档状态
-     */
-    public function toggleArchived()
-    {
-        $this->archived = !$this->archived;
-        $this->save();
-    }
 }

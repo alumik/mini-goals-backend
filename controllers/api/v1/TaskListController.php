@@ -9,7 +9,7 @@ use yii\filters\ContentNegotiator;
 use yii\web\Controller;
 use yii\web\Response;
 
-class TaskController extends Controller
+class TaskListController extends Controller
 {
     /**
      * @inheritdoc
@@ -47,20 +47,23 @@ class TaskController extends Controller
         $param = Yii::$app->request->post();
 
         $user = WxUser::findOne(['openid' => $param['openid']]);
-        $user->pushTaskList(TaskList::create($param['content']));
+        $task_list = new TaskList();
+        $task_list->setAttributes($param['content']);
+        $user->pushTaskList($task_list);
     }
 
     /**
-     * 切换任务列表归档状态
+     * 更新任务列表
      */
-    public function actionArchive()
+    public function actionUpdate()
     {
         $param = Yii::$app->request->post();
 
         $user = WxUser::findOne(['openid' => $param['openid']]);
         $task_list = TaskList::findOne($param['id_task_list']);
         if ($task_list->id_user == $user->id) {
-            $task_list->toggleArchived();
+            $task_list->setAttributes($param['content']);
+            $task_list->save();
         }
     }
 }
