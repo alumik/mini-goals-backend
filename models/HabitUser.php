@@ -17,7 +17,7 @@ use Yii;
  * @property HabitLike[] $habitLikes
  * @property Habit $habit
  * @property HabitUserState $state0
- * @property User $user
+ * @property WxUser $user
  */
 class HabitUser extends \yii\db\ActiveRecord
 {
@@ -40,7 +40,7 @@ class HabitUser extends \yii\db\ActiveRecord
             [['id_user', 'id_habit'], 'unique', 'targetAttribute' => ['id_user', 'id_habit']],
             [['id_habit'], 'exist', 'skipOnError' => true, 'targetClass' => Habit::className(), 'targetAttribute' => ['id_habit' => 'id']],
             [['state'], 'exist', 'skipOnError' => true, 'targetClass' => HabitUserState::className(), 'targetAttribute' => ['state' => 'id']],
-            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => WxUser::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -95,6 +95,6 @@ class HabitUser extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'id_user']);
+        return $this->hasOne(WxUser::className(), ['id' => 'id_user']);
     }
 }

@@ -13,7 +13,6 @@ class m190604_092251_init_task_module extends Migration
             'id' => $this->primaryKey(),
             'openid' => $this->string()->notNull()->unique(),
             'name' => $this->string()->notNull(),
-            'id_task_lists' => $this->integer()->null()->unique(),
         ]);
     }
 
@@ -46,32 +45,16 @@ class m190604_092251_init_task_module extends Migration
         $this->createTable('task_list', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
+            'id_user' => $this->integer()->notNull(),
             'archived' => $this->boolean()->notNull()->defaultValue(false),
-            'id_prev' => $this->integer()->null()->unique(),
-            'id_next' => $this->integer()->null()->unique(),
+            'order' => $this->integer()->null(),
         ]);
 
         $this->addForeignKey(
-            'user_task_list_id_fk',
+            'task_list_user_id_fk',
+            'task_list',
+            'id_user',
             'user',
-            'id_task_lists',
-            'task_list',
-            'id'
-        );
-
-        $this->addForeignKey(
-            'task_list_task_list_id_fk',
-            'task_list',
-            'id_prev',
-            'task_list',
-            'id'
-        );
-
-        $this->addForeignKey(
-            'task_list_task_list_id_fk_2',
-            'task_list',
-            'id_next',
-            'task_list',
             'id'
         );
     }

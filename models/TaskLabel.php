@@ -11,7 +11,7 @@ use Yii;
  * @property int $id_user
  * @property string $name
  *
- * @property User $user
+ * @property WxUser $user
  * @property TaskListTaskLabelRelation[] $taskListTaskLabelRelations
  * @property TaskList[] $taskLists
  */
@@ -35,7 +35,7 @@ class TaskLabel extends \yii\db\ActiveRecord
             [['id_user'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['id_user', 'name'], 'unique', 'targetAttribute' => ['id_user', 'name']],
-            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => WxUser::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -56,7 +56,7 @@ class TaskLabel extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'id_user']);
+        return $this->hasOne(WxUser::className(), ['id' => 'id_user']);
     }
 
     /**

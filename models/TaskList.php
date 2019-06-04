@@ -9,18 +9,14 @@ use Yii;
  *
  * @property int $id
  * @property string $name
+ * @property int $id_user
  * @property int $archived
- * @property int $id_prev
- * @property int $id_next
+ * @property int $order
  *
  * @property Task[] $tasks
- * @property TaskList $prev
- * @property TaskList $taskList
- * @property TaskList $next
- * @property TaskList $taskList0
+ * @property WxUser $user
  * @property TaskListTaskLabelRelation[] $taskListTaskLabelRelations
  * @property TaskLabel[] $taskLabels
- * @property User $user
  */
 class TaskList extends \yii\db\ActiveRecord
 {
@@ -38,13 +34,10 @@ class TaskList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['archived', 'id_prev', 'id_next'], 'integer'],
+            [['name', 'id_user'], 'required'],
+            [['id_user', 'archived', 'order'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['id_prev'], 'unique'],
-            [['id_next'], 'unique'],
-            [['id_prev'], 'exist', 'skipOnError' => true, 'targetClass' => TaskList::className(), 'targetAttribute' => ['id_prev' => 'id']],
-            [['id_next'], 'exist', 'skipOnError' => true, 'targetClass' => TaskList::className(), 'targetAttribute' => ['id_next' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => WxUser::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -56,9 +49,9 @@ class TaskList extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'id_user' => 'Id User',
             'archived' => 'Archived',
-            'id_prev' => 'Id Prev',
-            'id_next' => 'Id Next',
+            'order' => 'Order',
         ];
     }
 
@@ -73,33 +66,9 @@ class TaskList extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPrev()
+    public function getUser()
     {
-        return $this->hasOne(TaskList::className(), ['id' => 'id_prev']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTaskList()
-    {
-        return $this->hasOne(TaskList::className(), ['id_prev' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getNext()
-    {
-        return $this->hasOne(TaskList::className(), ['id' => 'id_next']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTaskList0()
-    {
-        return $this->hasOne(TaskList::className(), ['id_next' => 'id']);
+        return $this->hasOne(WxUser::className(), ['id' => 'id_user']);
     }
 
     /**
@@ -119,10 +88,15 @@ class TaskList extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * 新建任务列表
+     *
+     * @param $attributes
+     * @return TaskList
      */
-    public function getUser()
+    public static function create($attributes)
     {
-        return $this->hasOne(User::className(), ['id_task_lists' => 'id']);
+        $model = new self();
+        $model->setAttributes($attributes);
+        return $model;
     }
 }

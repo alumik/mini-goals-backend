@@ -10,13 +10,12 @@ use Yii;
  * @property int $id
  * @property string $openid
  * @property string $name
- * @property int $id_task_lists
  *
  * @property HabitLike[] $habitLikes
  * @property HabitUser[] $habitUsers
  * @property Habit[] $habits
  * @property TaskLabel[] $taskLabels
- * @property TaskList $taskLists
+ * @property TaskList[] $taskLists
  */
 class WxUser extends \yii\db\ActiveRecord
 {
@@ -35,11 +34,8 @@ class WxUser extends \yii\db\ActiveRecord
     {
         return [
             [['openid', 'name'], 'required'],
-            [['id_task_lists'], 'integer'],
             [['openid', 'name'], 'string', 'max' => 255],
             [['openid'], 'unique'],
-            [['id_task_lists'], 'unique'],
-            [['id_task_lists'], 'exist', 'skipOnError' => true, 'targetClass' => TaskList::className(), 'targetAttribute' => ['id_task_lists' => 'id']],
         ];
     }
 
@@ -52,7 +48,6 @@ class WxUser extends \yii\db\ActiveRecord
             'id' => 'ID',
             'openid' => 'Openid',
             'name' => 'Name',
-            'id_task_lists' => 'Id Task Lists',
         ];
     }
 
@@ -93,6 +88,35 @@ class WxUser extends \yii\db\ActiveRecord
      */
     public function getTaskLists()
     {
-        return $this->hasOne(TaskList::className(), ['id' => 'id_task_lists']);
+        return $this->hasMany(TaskList::className(), ['id_user' => 'id']);
+    }
+
+    /**
+     * 获取当前可用的顺序编号
+     *
+     * @return int
+     */
+    public function getTaskListOrder()
+    {
+        $task_list = $this->hasOne(TaskList::className(), ['id_user' => 'id'])
+            ->orderBy(['order' => SORT_DESC])
+            ->one();
+        /* @var $task_list TaskList */
+        if ($task_list) {
+            return $task_list->order + 1;
+        }
+        return 0;
+    }
+
+    /**
+     * 用户添加任务列表
+     *
+     * @param $task_list TaskList
+     */
+    public function pushTaskList($task_list)
+    {
+        $task_list->order = $this->getTaskListOrder();
+        $task_list->id_user = $this->id;
+        $task_list->save();
     }
 }

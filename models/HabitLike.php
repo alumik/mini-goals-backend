@@ -12,7 +12,7 @@ use Yii;
  * @property string $date
  *
  * @property HabitUser $habitUser
- * @property User $user
+ * @property WxUser $user
  */
 class HabitLike extends \yii\db\ActiveRecord
 {
@@ -35,7 +35,7 @@ class HabitLike extends \yii\db\ActiveRecord
             [['date'], 'safe'],
             [['id_habit_user', 'id_user', 'date'], 'unique', 'targetAttribute' => ['id_habit_user', 'id_user', 'date']],
             [['id_habit_user'], 'exist', 'skipOnError' => true, 'targetClass' => HabitUser::className(), 'targetAttribute' => ['id_habit_user' => 'id']],
-            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => WxUser::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -64,6 +64,6 @@ class HabitLike extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'id_user']);
+        return $this->hasOne(WxUser::className(), ['id' => 'id_user']);
     }
 }

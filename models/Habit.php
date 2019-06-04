@@ -18,7 +18,7 @@ use Yii;
  * @property HabitIcon $icon0
  * @property HabitType $type0
  * @property HabitUser[] $habitUsers
- * @property User[] $users
+ * @property WxUser[] $users
  */
 class Habit extends \yii\db\ActiveRecord
 {
@@ -91,6 +91,6 @@ class Habit extends \yii\db\ActiveRecord
      */
     public function getUsers()
     {
-        return $this->hasMany(User::className(), ['id' => 'id_user'])->viaTable('habit_user', ['id_habit' => 'id']);
+        return $this->hasMany(WxUser::className(), ['id' => 'id_user'])->viaTable('habit_user', ['id_habit' => 'id']);
     }
 }
