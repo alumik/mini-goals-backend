@@ -23,6 +23,10 @@ use yii\db\ActiveQuery;
 class TaskList extends \yii\db\ActiveRecord
 {
     public $labels;
+    public $grouped_tasks = [
+        'unfinished' => [],
+        'finished' => [],
+    ];
 
     public function fields()
     {
@@ -32,6 +36,7 @@ class TaskList extends \yii\db\ActiveRecord
             'archived',
             'order',
             'labels',
+            'grouped_tasks',
         ];
     }
 

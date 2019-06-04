@@ -18,23 +18,7 @@ class TaskAction extends Action
      */
     public function run()
     {
-        if (Yii::$app->request->isGet) {
-            $param = Yii::$app->request->get();
-
-            $user = WxUser::findOne(['openid' => $param['openid']]);
-            $task_list = TaskList::findOne($param['id_task_list']);
-
-            if ($task_list->id_user == $user->id) {
-                $unfinished_tasks = $task_list->getTasks(false)->all();
-                $finished_tasks = $task_list->getTasks(true)->all();
-                return [
-                    'unfinished' => $unfinished_tasks,
-                    'finished' => $finished_tasks,
-                ];
-            }
-
-
-        } else if (Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
             $param = Yii::$app->request->post();
 
             $user = WxUser::findOne(['openid' => $param['openid']]);

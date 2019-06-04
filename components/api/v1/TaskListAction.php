@@ -24,12 +24,22 @@ class TaskListAction extends Action
             $param = Yii::$app->request->get();
 
             $user = WxUser::findOne(['openid' => $param['openid']]);
-            $task_lists = $user->getTaskLists($param['archived'], $param['name'])->all();
+
+            if (isset($param['id_task_list'])) {
+                $task_lists = [TaskList::findOne($param['id_task_list'])];
+            } else {
+                $task_lists = $user->getTaskLists($param['archived'], $param['name'])->all();
+            }
+
             foreach ($task_lists as &$task_list) {
                 /* @var $task_list TaskList */
                 $task_list->labels = $task_list->taskLabels;
+                $task_list->grouped_tasks['unfinished']['count'] = $task_list->getTasks(false)->count();
+                $task_list->grouped_tasks['unfinished']['content'] = $task_list->getTasks(false)->all();
+                $task_list->grouped_tasks['finished']['count'] = $task_list->getTasks(true)->count();
+                $task_list->grouped_tasks['finished']['content'] = $task_list->getTasks(true)->all();
             }
-            return $task_lists;
+            return isset($param['id_task_list']) ? $task_lists[0] : $task_lists;
 
 
         } else if (Yii::$app->request->isPost) {
