@@ -15,7 +15,6 @@ use Yii;
  * @property HabitUser[] $habitUsers
  * @property Habit[] $habits
  * @property TaskLabel[] $taskLabels
- * @property TaskList[] $taskLists
  */
 class WxUser extends \yii\db\ActiveRecord
 {
@@ -84,15 +83,24 @@ class WxUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * 获取任务列表
+     *
+     * @param $archived
+     * @return TaskList[]
      */
-    public function getTaskLists()
+    public function getTaskLists($archived)
     {
-        return $this->hasMany(TaskList::className(), ['id_user' => 'id']);
+        return TaskList::find()
+            ->where([
+                'id_user' => $this->id,
+                'archived' => $archived,
+            ])
+            ->orderBy(['order' => SORT_DESC])
+            ->all();
     }
 
     /**
-     * 获取当前可用的顺序编号
+     * 获取当前可用的任务列表顺序编号
      *
      * @return int
      */
@@ -109,7 +117,7 @@ class WxUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * 用户添加任务列表
+     * 添加任务列表
      *
      * @param $task_list TaskList
      */

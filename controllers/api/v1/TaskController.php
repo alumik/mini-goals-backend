@@ -27,6 +27,19 @@ class TaskController extends Controller
     }
 
     /**
+     * 获取任务列表
+     *
+     * @param $openid
+     * @param $archived
+     * @return TaskList[]
+     */
+    public function actionIndex($openid, $archived)
+    {
+        $user = WxUser::findOne(['openid' => $openid]);
+        return $user->getTaskLists($archived);
+    }
+
+    /**
      * 添加任务列表
      */
     public function actionCreate()
