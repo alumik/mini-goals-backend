@@ -32,12 +32,13 @@ class TaskListController extends Controller
      *
      * @param $openid
      * @param $archived
+     * @param $name
      * @return TaskList[]
      */
-    public function actionIndex($openid, $archived)
+    public function actionIndex($openid, $archived, $name)
     {
         $user = WxUser::findOne(['openid' => $openid]);
-        $task_lists = $user->getTaskLists($archived)->all();
+        $task_lists = $user->getTaskLists($archived, $name)->all();
         foreach ($task_lists as &$task_list) {
             $task_list->labels = $task_list->taskLabels;
         }

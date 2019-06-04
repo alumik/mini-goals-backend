@@ -87,15 +87,17 @@ class WxUser extends \yii\db\ActiveRecord
      * 获取任务列表
      *
      * @param $archived
+     * @param $name
      * @return ActiveQuery
      */
-    public function getTaskLists($archived)
+    public function getTaskLists($archived, $name)
     {
         return TaskList::find()
             ->where([
                 'id_user' => $this->id,
                 'archived' => $archived,
             ])
+            ->andWhere(['like', 'name', $name])
             ->orderBy(['order' => SORT_DESC]);
     }
 
