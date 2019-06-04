@@ -6,6 +6,7 @@ use app\models\TaskLabel;
 use app\models\TaskList;
 use app\models\WxUser;
 use Yii;
+use yii\db\StaleObjectException;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
 use yii\web\Response;
@@ -40,6 +41,7 @@ class TaskListController extends Controller
         $user = WxUser::findOne(['openid' => $openid]);
         $task_lists = $user->getTaskLists($archived, $name)->all();
         foreach ($task_lists as &$task_list) {
+            /* @var $task_list TaskList */
             $task_list->labels = $task_list->taskLabels;
         }
         return $task_lists;
@@ -80,6 +82,8 @@ class TaskListController extends Controller
      * 获取并设置任务列表标签
      *
      * @return TaskLabel[]|null
+     * @throws \Throwable
+     * @throws StaleObjectException
      */
     public function actionLabel()
     {
@@ -105,6 +109,13 @@ class TaskListController extends Controller
                         $model->save();
                     }
                     $task_list->link('taskLabels', $model);
+                }
+            }
+
+            $labels = $user->taskLabels;
+            foreach ($labels as $label) {
+                if (!$label->taskLists) {
+                    $label->delete();
                 }
             }
         }

@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "task_list".
@@ -70,7 +72,7 @@ class TaskList extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTasks()
     {
@@ -78,7 +80,7 @@ class TaskList extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUser()
     {
@@ -86,7 +88,7 @@ class TaskList extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTaskListTaskLabelRelations()
     {
@@ -94,7 +96,10 @@ class TaskList extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * 获取标签
+     *
+     * @return ActiveQuery
+     * @throws InvalidConfigException
      */
     public function getTaskLabels()
     {

@@ -52,7 +52,7 @@ class WxUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getHabitLikes()
     {
@@ -60,7 +60,7 @@ class WxUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getHabitUsers()
     {
@@ -68,7 +68,7 @@ class WxUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getHabits()
     {
@@ -76,7 +76,9 @@ class WxUser extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * 获取用户创建的标签
+     *
+     * @return ActiveQuery
      */
     public function getTaskLabels()
     {
