@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
+use yii\db\StaleObjectException;
 
 /**
  * This is the model class for table "task_label".
@@ -78,5 +79,22 @@ class TaskLabel extends \yii\db\ActiveRecord
     public function getTaskLists()
     {
         return $this->hasMany(TaskList::className(), ['id' => 'id_task_list'])->viaTable('task_list_task_label_relation', ['id_task_label' => 'id']);
+    }
+
+    /**
+     * 删除无主标签
+     *
+     * @param $user WxUser
+     * @throws StaleObjectException
+     * @throws \Throwable
+     */
+    public static function clean($user)
+    {
+        $labels = $user->taskLabels;
+        foreach ($labels as $label) {
+            if (!$label->taskLists) {
+                $label->delete();
+            }
+        }
     }
 }

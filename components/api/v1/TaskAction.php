@@ -12,7 +12,9 @@ use yii\db\StaleObjectException;
 class TaskAction extends Action
 {
     /**
-     * @inheritdoc
+     * @return array|null
+     * @throws StaleObjectException
+     * @throws \Throwable
      */
     public function run()
     {
@@ -63,11 +65,7 @@ class TaskAction extends Action
             $task = Task::findOne($param['content']['id']);
 
             if ($task->taskList->id_user == $user->id) {
-                try {
-                    $task->delete();
-                } catch (StaleObjectException $e) {
-                } catch (\Throwable $e) {
-                }
+                $task->delete();
             }
 
 

@@ -12,7 +12,9 @@ use yii\db\StaleObjectException;
 class TaskLabelAction extends Action
 {
     /**
-     * @inheritdoc
+     * @return TaskLabel[]|null
+     * @throws StaleObjectException
+     * @throws \Throwable
      */
     public function run()
     {
@@ -41,17 +43,7 @@ class TaskLabelAction extends Action
                     }
                     $task_list->link('taskLabels', $model);
                 }
-            }
-
-            $labels = $user->taskLabels;
-            foreach ($labels as $label) {
-                if (!$label->taskLists) {
-                    try {
-                        $label->delete();
-                    } catch (StaleObjectException $e) {
-                    } catch (\Throwable $e) {
-                    }
-                }
+                TaskLabel::clean($user);
             }
 
 

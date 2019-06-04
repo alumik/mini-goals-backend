@@ -2,15 +2,21 @@
 
 namespace app\components\api\v1;
 
+use app\models\Task;
+use app\models\TaskLabel;
 use app\models\TaskList;
 use app\models\WxUser;
 use Yii;
 use yii\base\Action;
+use yii\db\ActiveRecord;
+use yii\db\StaleObjectException;
 
 class TaskListAction extends Action
 {
     /**
-     * @inheritdoc
+     * @return array|ActiveRecord[]|null
+     * @throws StaleObjectException
+     * @throws \Throwable
      */
     public function run()
     {
@@ -51,6 +57,16 @@ class TaskListAction extends Action
 
         } else if (Yii::$app->request->isDelete) {
             $param = Yii::$app->request->bodyParams;
+
+            $user = WxUser::findOne(['openid' => $param['openid']]);
+            $task_list = TaskList::findOne($param['content']['id']);
+
+            if ($task_list->id_user == $user->id) {
+                Task::deleteAll(['id_task_list' => $task_list->id]);
+                $task_list->unlinkAll('taskLabels', true);
+                $task_list->delete();
+                TaskLabel::clean($user);
+            }
 
 
         }
