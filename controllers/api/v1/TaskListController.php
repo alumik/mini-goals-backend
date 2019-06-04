@@ -94,16 +94,18 @@ class TaskListController extends Controller
             $user = WxUser::findOne(['openid' => $param['openid']]);
             $task_list = TaskList::findOne($param['content']['id_task_list']);
 
-            $task_list->unlinkAll('taskLabels', true);
-            foreach ($param['content']['labels'] as $label) {
-                $model = TaskLabel::findOne(['id_user' => $user->id, 'name' => $label]);
-                if (!$model) {
-                    $model = new TaskLabel();
-                    $model->id_user = $user->id;
-                    $model->name = $label;
-                    $model->save();
+            if ($task_list->id_user == $user->id) {
+                $task_list->unlinkAll('taskLabels', true);
+                foreach ($param['content']['labels'] as $label) {
+                    $model = TaskLabel::findOne(['id_user' => $user->id, 'name' => $label]);
+                    if (!$model) {
+                        $model = new TaskLabel();
+                        $model->id_user = $user->id;
+                        $model->name = $label;
+                        $model->save();
+                    }
+                    $task_list->link('taskLabels', $model);
                 }
-                $task_list->link('taskLabels', $model);
             }
         }
         return null;
