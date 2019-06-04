@@ -53,9 +53,9 @@ class TaskLabelAction extends Action
                     }
                 }
             }
+
+
         }
-
-
         return null;
     }
 }

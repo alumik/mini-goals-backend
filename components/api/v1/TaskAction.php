@@ -58,7 +58,7 @@ class TaskAction extends Action
 
 
         } else if (Yii::$app->request->isDelete) {
-            $param = Yii::$app->request->post();
+            $param = Yii::$app->request->bodyParams;
             $user = WxUser::findOne(['openid' => $param['openid']]);
             $task = Task::findOne($param['content']['id']);
 
@@ -69,9 +69,9 @@ class TaskAction extends Action
                 } catch (\Throwable $e) {
                 }
             }
+
+
         }
-
-
         return null;
     }
 }

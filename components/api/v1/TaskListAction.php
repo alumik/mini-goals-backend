@@ -47,9 +47,13 @@ class TaskListAction extends Action
                     $model->save();
                 }
             }
+
+
+        } else if (Yii::$app->request->isDelete) {
+            $param = Yii::$app->request->bodyParams;
+
+
         }
-
-
         return null;
     }
 }
