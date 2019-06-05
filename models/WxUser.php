@@ -94,17 +94,25 @@ class WxUser extends \yii\db\ActiveRecord
      *
      * @param $archived
      * @param $name
+     * @param $label
      * @return ActiveQuery
      */
-    public function getTaskLists($archived, $name)
+    public function getTaskLists($archived, $name, $label)
     {
-        return TaskList::find()
+        $query =  TaskList::find()
             ->where([
-                'id_user' => $this->id,
-                'archived' => $archived,
+                'task_list.id_user' => $this->id,
+                'task_list.archived' => $archived,
             ])
-            ->andWhere(['like', 'name', $name])
+            ->andWhere(['like', 'task_list.name', $name])
             ->orderBy(['order' => SORT_DESC]);
+        if (intval($label) != 0) {
+            $query = $query
+                ->joinWith('taskLabels')
+                ->andWhere(['task_label.id' => $label]);
+        }
+
+        return $query;
     }
 
     /**

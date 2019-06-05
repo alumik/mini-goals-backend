@@ -29,7 +29,7 @@ class TaskListAction extends Action
                     TaskList::findOne(['id' => $param['id_task_list'], 'id_user' => $user->id])
                 ];
             } else {
-                $task_lists = $user->getTaskLists($param['archived'], $param['name'])->all();
+                $task_lists = $user->getTaskLists($param['archived'], $param['name'], $param['label'])->all();
             }
 
             foreach ($task_lists as &$task_list) {
