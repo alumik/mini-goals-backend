@@ -30,7 +30,7 @@ class TaskAction extends Action
                 $task->save();
             }
 
-        } else if (Yii::$app->request->isPatch) {
+        } else if (Yii::$app->request->isPut) {
             $param = Yii::$app->request->bodyParams;
 
             $user = WxUser::findOne(['openid' => $param['openid']]);

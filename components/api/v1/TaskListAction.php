@@ -47,7 +47,7 @@ class TaskListAction extends Action
             $task_list->setAttributes($param['content']);
             $user->pushTaskList($task_list);
 
-        } else if (Yii::$app->request->isPatch) {
+        } else if (Yii::$app->request->isPut) {
             $param = Yii::$app->request->bodyParams;
 
             $user = WxUser::findOne(['openid' => $param['openid']]);

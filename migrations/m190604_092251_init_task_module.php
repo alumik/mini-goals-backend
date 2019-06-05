@@ -12,7 +12,6 @@ class m190604_092251_init_task_module extends Migration
         $this->createTable('user', [
             'id' => $this->primaryKey(),
             'openid' => $this->string()->notNull()->unique(),
-            'name' => $this->string()->notNull(),
         ]);
     }
 

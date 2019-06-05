@@ -11,6 +11,7 @@ use yii\db\ActiveQuery;
  * @property int $id
  * @property string $openid
  * @property string $name
+ * @property string $avatar
  *
  * @property HabitLike[] $habitLikes
  * @property HabitUser[] $habitUsers
@@ -19,6 +20,8 @@ use yii\db\ActiveQuery;
  */
 class WxUser extends \yii\db\ActiveRecord
 {
+    public static $GUEST_NAME = 'Guest';
+
     /**
      * {@inheritdoc}
      */
@@ -34,7 +37,7 @@ class WxUser extends \yii\db\ActiveRecord
     {
         return [
             [['openid', 'name'], 'required'],
-            [['openid', 'name'], 'string', 'max' => 255],
+            [['openid', 'name', 'avatar'], 'string', 'max' => 255],
             [['openid'], 'unique'],
         ];
     }
@@ -48,6 +51,7 @@ class WxUser extends \yii\db\ActiveRecord
             'id' => 'ID',
             'openid' => 'Openid',
             'name' => 'Name',
+            'avatar' => 'Avatar',
         ];
     }
 
