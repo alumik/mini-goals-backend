@@ -42,10 +42,10 @@ class TaskAction extends Action
             }
 
         } else if (Yii::$app->request->isDelete) {
-            $param = Yii::$app->request->bodyParams;
+            $param = Yii::$app->request->get();
 
             $user = WxUser::findOne(['openid' => $param['openid']]);
-            $task = Task::findOne($param['content']['id']);
+            $task = Task::findOne($param['id_task']);
 
             if ($task->taskList->id_user == $user->id) {
                 $task->delete();
