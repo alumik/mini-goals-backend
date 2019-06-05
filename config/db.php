@@ -3,8 +3,8 @@
 return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=mini_goals_remake',
-    'username' => 'root',
-    'password' => 'root',
+    'username' => 'mini_goals_remake',
+    'password' => 'mini_goals_remake',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)
