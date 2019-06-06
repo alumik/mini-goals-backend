@@ -20,10 +20,16 @@ class TaskListAction extends Action
      */
     public function run()
     {
+        $session_id = Yii::$app->request->headers['Session-ID'];
+        $openid = Yii::$app->cache->get($session_id);
+        $user = null;
+        if ($openid) {
+            $user = WxUser::findOne(['openid' => $openid]);
+        }
+
         if (Yii::$app->request->isGet) {
             $param = Yii::$app->request->get();
 
-            $user = WxUser::findOne(['openid' => $param['openid']]);
             if (isset($param['id_task_list'])) {
                 $task_lists = [
                     TaskList::findOne(['id' => $param['id_task_list'], 'id_user' => $user->id])
@@ -41,16 +47,12 @@ class TaskListAction extends Action
         } else if (Yii::$app->request->isPost) {
             $param = Yii::$app->request->post();
 
-            $user = WxUser::findOne(['openid' => $param['openid']]);
-
             $task_list = new TaskList();
             $task_list->setAttributes($param['content']);
             $user->pushTaskList($task_list);
 
         } else if (Yii::$app->request->isPut) {
             $param = Yii::$app->request->bodyParams;
-
-            $user = WxUser::findOne(['openid' => $param['openid']]);
 
             foreach ($param['content'] as $task_list) {
                 $model = TaskList::findOne($task_list['id']);
@@ -63,9 +65,7 @@ class TaskListAction extends Action
         } else if (Yii::$app->request->isDelete) {
             $param = Yii::$app->request->get();
 
-            $user = WxUser::findOne(['openid' => $param['openid']]);
             $task_list = TaskList::findOne($param['id_task_list']);
-
             if ($task_list->id_user == $user->id) {
                 Task::deleteAll(['id_task_list' => $task_list->id]);
                 $task_list->unlinkAll('taskLabels', true);

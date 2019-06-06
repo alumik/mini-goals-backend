@@ -18,12 +18,17 @@ class TaskAction extends Action
      */
     public function run()
     {
+        $session_id = Yii::$app->request->headers['Session-ID'];
+        $openid = Yii::$app->cache->get($session_id);
+        $user = null;
+        if ($openid) {
+            $user = WxUser::findOne(['openid' => $openid]);
+        }
+
         if (Yii::$app->request->isPost) {
             $param = Yii::$app->request->post();
 
-            $user = WxUser::findOne(['openid' => $param['openid']]);
             $task_list = TaskList::findOne($param['content']['id_task_list']);
-
             if ($task_list->id_user == $user->id) {
                 $task = new Task();
                 $task->setAttributes($param['content']);
@@ -33,9 +38,7 @@ class TaskAction extends Action
         } else if (Yii::$app->request->isPut) {
             $param = Yii::$app->request->bodyParams;
 
-            $user = WxUser::findOne(['openid' => $param['openid']]);
             $task = Task::findOne($param['content']['id']);
-
             if ($task->taskList->id_user == $user->id) {
                 $task->setAttributes($param['content']);
                 $task->save();
@@ -44,9 +47,7 @@ class TaskAction extends Action
         } else if (Yii::$app->request->isDelete) {
             $param = Yii::$app->request->get();
 
-            $user = WxUser::findOne(['openid' => $param['openid']]);
             $task = Task::findOne($param['id_task']);
-
             if ($task->taskList->id_user == $user->id) {
                 $task->delete();
             }

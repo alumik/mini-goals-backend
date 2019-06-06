@@ -18,19 +18,20 @@ class TaskLabelAction extends Action
      */
     public function run()
     {
+        $session_id = Yii::$app->request->headers['Session-ID'];
+        $openid = Yii::$app->cache->get($session_id);
+        $user = null;
+        if ($openid) {
+            $user = WxUser::findOne(['openid' => $openid]);
+        }
+
         if (Yii::$app->request->isGet) {
-            $param = Yii::$app->request->get();
-
-            $user = WxUser::findOne(['openid' => $param['openid']]);
-
             return $user->taskLabels;
 
         } else if (Yii::$app->request->isPost) {
             $param = Yii::$app->request->post();
 
-            $user = WxUser::findOne(['openid' => $param['openid']]);
             $task_list = TaskList::findOne($param['content']['id_task_list']);
-
             if ($task_list->id_user == $user->id) {
                 $task_list->unlinkAll('taskLabels', true);
                 $task_list->addLabels($user, $param['content']['labels']);
