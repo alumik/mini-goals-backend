@@ -20,8 +20,6 @@ use yii\db\ActiveQuery;
  */
 class WxUser extends \yii\db\ActiveRecord
 {
-    public static $GUEST_NAME = 'Guest';
-
     /**
      * {@inheritdoc}
      */

@@ -15,15 +15,17 @@ use yii\db\ActiveQuery;
  * @property int $archived
  * @property int $order
  *
- * @property Task[] $tasks
  * @property WxUser $user
  * @property TaskListTaskLabelRelation[] $taskListTaskLabelRelations
  * @property TaskLabel[] $taskLabels
+ *
+ * @property $tasks
+ * @property TaskLabel[] $labels
  */
 class TaskList extends \yii\db\ActiveRecord
 {
     public $labels;
-    public $grouped_tasks = [
+    public $tasks = [
         'unfinished' => [],
         'finished' => [],
     ];
@@ -36,7 +38,7 @@ class TaskList extends \yii\db\ActiveRecord
             'archived',
             'order',
             'labels',
-            'grouped_tasks',
+            'tasks',
         ];
     }
 
@@ -143,9 +145,9 @@ class TaskList extends \yii\db\ActiveRecord
     public function putExtra()
     {
         $this->labels = $this->taskLabels;
-        $this->grouped_tasks['unfinished']['count'] = $this->getTasks(false)->count();
-        $this->grouped_tasks['unfinished']['content'] = $this->getTasks(false)->all();
-        $this->grouped_tasks['finished']['count'] = $this->getTasks(true)->count();
-        $this->grouped_tasks['finished']['content'] = $this->getTasks(true)->all();
+        $this->tasks['unfinished']['count'] = $this->getTasks(false)->count();
+        $this->tasks['unfinished']['content'] = $this->getTasks(false)->all();
+        $this->tasks['finished']['count'] = $this->getTasks(true)->count();
+        $this->tasks['finished']['content'] = $this->getTasks(true)->all();
     }
 }

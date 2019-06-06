@@ -26,7 +26,6 @@ class UserAction extends Action
             if (!$user) {
                 $user = new WxUser();
                 $user->openid = $openid;
-                $user->name = WxUser::$GUEST_NAME;
                 $user->save();
             }
             return ['openid' => $openid];
