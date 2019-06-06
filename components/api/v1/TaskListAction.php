@@ -22,10 +22,7 @@ class TaskListAction extends Action
     {
         $session_id = Yii::$app->request->headers['Session-ID'];
         $openid = Yii::$app->cache->get($session_id);
-        $user = null;
-        if ($openid) {
-            $user = WxUser::findOne(['openid' => $openid]);
-        }
+        $user = WxUser::findOne(['openid' => $openid]);
 
         if (Yii::$app->request->isGet) {
             $param = Yii::$app->request->get();
@@ -37,24 +34,22 @@ class TaskListAction extends Action
             } else {
                 $task_lists = $user->getTaskLists($param['archived'], $param['name'], $param['label'])->all();
             }
-
             foreach ($task_lists as &$task_list) {
                 $task_list->putExtra();
             }
-
             return isset($param['id_task_list']) && $task_lists ? $task_lists[0] : $task_lists;
 
         } else if (Yii::$app->request->isPost) {
             $param = Yii::$app->request->post();
 
             $task_list = new TaskList();
-            $task_list->setAttributes($param['content']);
+            $task_list->setAttributes($param);
             $user->pushTaskList($task_list);
 
         } else if (Yii::$app->request->isPut) {
             $param = Yii::$app->request->bodyParams;
 
-            foreach ($param['content'] as $task_list) {
+            foreach ($param['data'] as $task_list) {
                 $model = TaskList::findOne($task_list['id']);
                 if ($model->id_user == $user->id) {
                     $model->setAttributes($task_list);

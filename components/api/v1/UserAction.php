@@ -5,10 +5,15 @@ namespace app\components\api\v1;
 use app\models\WxUser;
 use Yii;
 use yii\base\Action;
+use yii\base\Exception;
 use yii\helpers\Json;
 
 class UserAction extends Action
 {
+    /**
+     * @return array|null
+     * @throws Exception
+     */
     public function run()
     {
         if (Yii::$app->request->isPost) {
@@ -28,11 +33,12 @@ class UserAction extends Action
                 $user->openid = $openid;
                 $user->save();
             }
+
             do {
                 $session_id = Yii::$app->security->generateRandomString(32);
             } while (Yii::$app->cache->exists($session_id));
             Yii::$app->cache->set($session_id, $openid, 7200);
-            return ['session_id' => $session_id];
+            return ['sessionId' => $session_id];
         }
 
         return null;

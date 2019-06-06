@@ -20,10 +20,7 @@ class TaskLabelAction extends Action
     {
         $session_id = Yii::$app->request->headers['Session-ID'];
         $openid = Yii::$app->cache->get($session_id);
-        $user = null;
-        if ($openid) {
-            $user = WxUser::findOne(['openid' => $openid]);
-        }
+        $user = WxUser::findOne(['openid' => $openid]);
 
         if (Yii::$app->request->isGet) {
             return $user->taskLabels;
@@ -31,10 +28,10 @@ class TaskLabelAction extends Action
         } else if (Yii::$app->request->isPost) {
             $param = Yii::$app->request->post();
 
-            $task_list = TaskList::findOne($param['content']['id_task_list']);
+            $task_list = TaskList::findOne($param['id_task_list']);
             if ($task_list->id_user == $user->id) {
                 $task_list->unlinkAll('taskLabels', true);
-                $task_list->addLabels($user, $param['content']['labels']);
+                $task_list->addLabels($user, $param['labels']);
                 TaskLabel::clean($user);
             }
         }

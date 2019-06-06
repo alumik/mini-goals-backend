@@ -20,27 +20,24 @@ class TaskAction extends Action
     {
         $session_id = Yii::$app->request->headers['Session-ID'];
         $openid = Yii::$app->cache->get($session_id);
-        $user = null;
-        if ($openid) {
-            $user = WxUser::findOne(['openid' => $openid]);
-        }
+        $user = WxUser::findOne(['openid' => $openid]);
 
         if (Yii::$app->request->isPost) {
             $param = Yii::$app->request->post();
 
-            $task_list = TaskList::findOne($param['content']['id_task_list']);
+            $task_list = TaskList::findOne($param['id_task_list']);
             if ($task_list->id_user == $user->id) {
                 $task = new Task();
-                $task->setAttributes($param['content']);
+                $task->setAttributes($param);
                 $task->save();
             }
 
         } else if (Yii::$app->request->isPut) {
             $param = Yii::$app->request->bodyParams;
 
-            $task = Task::findOne($param['content']['id']);
+            $task = Task::findOne($param['id']);
             if ($task->taskList->id_user == $user->id) {
-                $task->setAttributes($param['content']);
+                $task->setAttributes($param);
                 $task->save();
             }
 
