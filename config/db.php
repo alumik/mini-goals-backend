@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=aliyun.alumik.cn;dbname=mini_goals_remake',
+    'dsn' => 'mysql:host=localhost;dbname=mini_goals_remake',
     'username' => 'mini_goals_remake',
     'password' => 'mini_goals_remake',
     'charset' => 'utf8',
