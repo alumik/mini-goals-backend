@@ -28,7 +28,9 @@ class UserAction extends Action
                 $user->openid = $openid;
                 $user->save();
             }
-            $session_id = Yii::$app->security->generateRandomString(32);
+            do {
+                $session_id = Yii::$app->security->generateRandomString(32);
+            } while (Yii::$app->cache->exists($session_id));
             Yii::$app->cache->set($session_id, $openid, 7200);
             return ['session_id' => $session_id];
         }
