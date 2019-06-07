@@ -145,9 +145,9 @@ class TaskList extends \yii\db\ActiveRecord
     public function putExtra()
     {
         $this->labels = $this->taskLabels;
-        $this->tasks['unfinished']['count'] = $this->getTasks(false)->count();
+        $this->tasks['unfinished']['count'] = intval($this->getTasks(false)->count());
         $this->tasks['unfinished']['content'] = $this->getTasks(false)->all();
-        $this->tasks['finished']['count'] = $this->getTasks(true)->count();
+        $this->tasks['finished']['count'] = intval($this->getTasks(true)->count());
         $this->tasks['finished']['content'] = $this->getTasks(true)->all();
     }
 }
