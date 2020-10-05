@@ -10,12 +10,6 @@ use yii\db\ActiveQuery;
  *
  * @property int $id
  * @property string $openid
- * @property string $name
- * @property string $avatar
- *
- * @property HabitLike[] $habitLikes
- * @property HabitUser[] $habitUsers
- * @property Habit[] $habits
  * @property TaskLabel[] $taskLabels
  */
 class WxUser extends \yii\db\ActiveRecord
@@ -34,9 +28,9 @@ class WxUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['openid', 'name'], 'required'],
-            [['openid', 'name', 'avatar'], 'string', 'max' => 255],
-            [['openid'], 'unique'],
+            ['openid', 'required'],
+            ['openid', 'string', 'max' => 255],
+            ['openid', 'unique'],
         ];
     }
 
@@ -48,33 +42,7 @@ class WxUser extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'openid' => 'Openid',
-            'name' => 'Name',
-            'avatar' => 'Avatar',
         ];
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getHabitLikes()
-    {
-        return $this->hasMany(HabitLike::className(), ['id_user' => 'id']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getHabitUsers()
-    {
-        return $this->hasMany(HabitUser::className(), ['id_user' => 'id']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getHabits()
-    {
-        return $this->hasMany(Habit::className(), ['id' => 'id_habit'])->viaTable('habit_user', ['id_user' => 'id']);
     }
 
     /**
@@ -97,7 +65,7 @@ class WxUser extends \yii\db\ActiveRecord
      */
     public function getTaskLists($archived, $name, $label)
     {
-        $query =  TaskList::find()
+        $query = TaskList::find()
             ->where([
                 'task_list.id_user' => $this->id,
                 'task_list.archived' => $archived,
