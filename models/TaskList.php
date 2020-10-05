@@ -2,9 +2,9 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "task_list".
@@ -22,7 +22,7 @@ use yii\db\ActiveQuery;
  * @property $tasks
  * @property TaskLabel[] $labels
  */
-class TaskList extends \yii\db\ActiveRecord
+class TaskList extends ActiveRecord
 {
     public $labels;
     public $tasks = [
@@ -60,7 +60,7 @@ class TaskList extends \yii\db\ActiveRecord
             [['id_user', 'order'], 'integer'],
             [['archived'], 'boolean'],
             [['name'], 'string', 'max' => 255],
-            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => WxUser::className(), 'targetAttribute' => ['id_user' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => WxUser::class, 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -83,7 +83,7 @@ class TaskList extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(WxUser::className(), ['id' => 'id_user']);
+        return $this->hasOne(WxUser::class, ['id' => 'id_user']);
     }
 
     /**
@@ -91,7 +91,7 @@ class TaskList extends \yii\db\ActiveRecord
      */
     public function getTaskListTaskLabelRelations()
     {
-        return $this->hasMany(TaskListTaskLabelRelation::className(), ['id_task_list' => 'id']);
+        return $this->hasMany(TaskListTaskLabelRelation::class, ['id_task_list' => 'id']);
     }
 
     /**
@@ -102,7 +102,7 @@ class TaskList extends \yii\db\ActiveRecord
      */
     public function getTaskLabels()
     {
-        return $this->hasMany(TaskLabel::className(), ['id' => 'id_task_label'])->viaTable('task_list_task_label_relation', ['id_task_list' => 'id']);
+        return $this->hasMany(TaskLabel::class, ['id' => 'id_task_label'])->viaTable('task_list_task_label_relation', ['id_task_list' => 'id']);
     }
 
     /**
@@ -114,7 +114,7 @@ class TaskList extends \yii\db\ActiveRecord
      */
     public function getTasks($finished, $limit = null)
     {
-        return $this->hasMany(Task::className(), ['id_task_list' => 'id'])
+        return $this->hasMany(Task::class, ['id_task_list' => 'id'])
             ->where(['finished' => $finished])
             ->limit($limit);
     }

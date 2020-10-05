@@ -2,8 +2,8 @@
 
 namespace app\models;
 
-use Yii;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "task".
@@ -15,7 +15,7 @@ use yii\db\ActiveQuery;
  *
  * @property TaskList $taskList
  */
-class Task extends \yii\db\ActiveRecord
+class Task extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -34,7 +34,7 @@ class Task extends \yii\db\ActiveRecord
             [['id_task_list', 'content'], 'required'],
             [['id_task_list', 'finished'], 'integer'],
             [['content'], 'string'],
-            [['id_task_list'], 'exist', 'skipOnError' => true, 'targetClass' => TaskList::className(), 'targetAttribute' => ['id_task_list' => 'id']],
+            [['id_task_list'], 'exist', 'skipOnError' => true, 'targetClass' => TaskList::class, 'targetAttribute' => ['id_task_list' => 'id']],
         ];
     }
 
@@ -58,6 +58,6 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getTaskList()
     {
-        return $this->hasOne(TaskList::className(), ['id' => 'id_task_list']);
+        return $this->hasOne(TaskList::class, ['id' => 'id_task_list']);
     }
 }

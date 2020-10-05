@@ -19,7 +19,7 @@ class V1Controller extends Controller
     {
         return [
             [
-                'class' => ContentNegotiator::className(),
+                'class' => ContentNegotiator::class,
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
@@ -33,10 +33,10 @@ class V1Controller extends Controller
     public function actions()
     {
         return [
-            'user' => UserAction::className(),
-            'task-list' => TaskListAction::className(),
-            'task-label' => TaskLabelAction::className(),
-            'task' => TaskAction::className(),
+            'user' => UserAction::class,
+            'task-list' => TaskListAction::class,
+            'task-label' => TaskLabelAction::class,
+            'task' => TaskAction::class,
         ];
     }
 }

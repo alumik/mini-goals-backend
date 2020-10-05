@@ -2,8 +2,8 @@
 
 namespace app\models;
 
-use Yii;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "user".
@@ -12,7 +12,7 @@ use yii\db\ActiveQuery;
  * @property string $openid
  * @property TaskLabel[] $taskLabels
  */
-class WxUser extends \yii\db\ActiveRecord
+class WxUser extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -52,7 +52,7 @@ class WxUser extends \yii\db\ActiveRecord
      */
     public function getTaskLabels()
     {
-        return $this->hasMany(TaskLabel::className(), ['id_user' => 'id']);
+        return $this->hasMany(TaskLabel::class, ['id_user' => 'id']);
     }
 
     /**
@@ -88,7 +88,7 @@ class WxUser extends \yii\db\ActiveRecord
      */
     public function getTaskListOrder()
     {
-        $task_list = $this->hasOne(TaskList::className(), ['id_user' => 'id'])
+        $task_list = $this->hasOne(TaskList::class, ['id_user' => 'id'])
             ->orderBy(['order' => SORT_DESC])
             ->one();
         /* @var $task_list TaskList */

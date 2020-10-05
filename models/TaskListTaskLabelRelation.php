@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "task_list_task_label_relation".
@@ -13,7 +13,7 @@ use Yii;
  * @property TaskLabel $taskLabel
  * @property TaskList $taskList
  */
-class TaskListTaskLabelRelation extends \yii\db\ActiveRecord
+class TaskListTaskLabelRelation extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -32,8 +32,8 @@ class TaskListTaskLabelRelation extends \yii\db\ActiveRecord
             [['id_task_label', 'id_task_list'], 'required'],
             [['id_task_label', 'id_task_list'], 'integer'],
             [['id_task_label', 'id_task_list'], 'unique', 'targetAttribute' => ['id_task_label', 'id_task_list']],
-            [['id_task_label'], 'exist', 'skipOnError' => true, 'targetClass' => TaskLabel::className(), 'targetAttribute' => ['id_task_label' => 'id']],
-            [['id_task_list'], 'exist', 'skipOnError' => true, 'targetClass' => TaskList::className(), 'targetAttribute' => ['id_task_list' => 'id']],
+            [['id_task_label'], 'exist', 'skipOnError' => true, 'targetClass' => TaskLabel::class, 'targetAttribute' => ['id_task_label' => 'id']],
+            [['id_task_list'], 'exist', 'skipOnError' => true, 'targetClass' => TaskList::class, 'targetAttribute' => ['id_task_list' => 'id']],
         ];
     }
 
@@ -53,7 +53,7 @@ class TaskListTaskLabelRelation extends \yii\db\ActiveRecord
      */
     public function getTaskLabel()
     {
-        return $this->hasOne(TaskLabel::className(), ['id' => 'id_task_label']);
+        return $this->hasOne(TaskLabel::class, ['id' => 'id_task_label']);
     }
 
     /**
@@ -61,6 +61,6 @@ class TaskListTaskLabelRelation extends \yii\db\ActiveRecord
      */
     public function getTaskList()
     {
-        return $this->hasOne(TaskList::className(), ['id' => 'id_task_list']);
+        return $this->hasOne(TaskList::class, ['id' => 'id_task_list']);
     }
 }
