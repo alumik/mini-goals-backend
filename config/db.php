@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=aliyun.alumik.cn;dbname=mini_goals_remake',
-    'username' => 'mini_goals_remake',
-    'password' => 'mini_goals_remake',
+    'dsn' => 'mysql:host=localhost;dbname=minigoals',
+    'username' => 'minigoals',
+    'password' => 'minigoals',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

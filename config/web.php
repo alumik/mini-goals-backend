@@ -26,7 +26,7 @@ $config = [
             //'class' => 'yii\caching\FileCache',
             'class'=>'yii\redis\Cache',
             'redis'=>[
-                'hostname' => 'aliyun.alumik.cn',
+                'hostname' => 'localhost',
                 'port' => 6379,
                 'database' => 0
             ],

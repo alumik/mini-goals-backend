@@ -4,6 +4,6 @@ return [
     'adminEmail' => 'admin@example.com',
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
-    'wx_appid' => 'wxa1e403724e99c1fa',
-    'wx_secret' => '7446cb004ad86f28f7a5a3a69faa1f86',
+    'wx_appid' => 'wxd0adda4e462ea087',
+    'wx_secret' => 'e5a805582e50c56bedc8ed581facac5a',
 ];
